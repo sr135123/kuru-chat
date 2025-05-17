@@ -1,0 +1,16 @@
+{
+  "name": "kurukuru-chat",
+  "version": "1.0.0",
+  "description": "Kurukuru Chat - 웹 챗봇",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.6.0",
+    "dotenv": "^16.0.3"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
