@@ -302,7 +302,7 @@
     }
 
     function escapeHtml(unsafe) {
-      return unsafe || ''
+      return unsafe || ""
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
@@ -319,12 +319,12 @@
         const key = `__CODE_BLOCK_${placeholderIndex++}__`;
         placeholderMap.set(key, { title: title.trim(), content: content.trim() });
         return key;
-      }) || '';
+      }) || "";
 
       text = escapeHtml(text);
 
       // 3. 마크다운 헤더
-      text = text || ''
+      text = text || ""
         .replace(/^### (.*$)/gim, '<h3>$1</h3>')
         .replace(/^## (.*$)/gim, '<h2>$1</h2>')
         .replace(/^# (.*$)/gim, '<h1>$1</h1>');
@@ -333,7 +333,7 @@
       text = text.replace(/\{\{(.*?)\}\}/g, (_, filename) => {
         const safeName = filename.trim().replace(/[^a-zA-Z0-9-_]/g, '');
         return `<br><img src="/img/${safeName}.png" alt="${safeName}" class="inline-image"><br>`;
-      }) || '';
+      }) || "";
 
       // 5. 테이블
       const tableRegex = /((?:^\|.*?\|\s*(?:\n|$))+)/gm;
@@ -348,7 +348,7 @@
         const tbody = '<tbody>' + body.map(row => '<tr>' + row.map(c => `<td>${c}</td>`).join('') + '</tr>').join('') + '</tbody>';
 
         return `<table class="chat-table">${thead}${tbody}</table>`;
-      }) || '';
+      }) || "";
 
       // 2단계: 실제 HTML 변환으로 치환
       for (const [key, { title, content }] of placeholderMap.entries()) {
@@ -375,7 +375,7 @@
         `;
       });*/
 
-      return text || ''
+      return text || ""
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
         .replace(/(^|\s)\*(?!\s)([^\*]+?)\*(?!\*)/g, '$1<em>$2</em>')
         .replace(/^(\s*)\*\s+(.*)$/gm, '$1• $2')
