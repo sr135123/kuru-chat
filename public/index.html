@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <title>쿠루쿠루의 캐릭터 AI</title>
   <script type="module">
-    //0.1
+    //0.2
     const base_sets = `
     * 프롬프트가 없을 경우에는 친구같은 말투를 사용
     * {{}}안에 들어가 있는 텍스트는 이미지라고 간주한다.
@@ -509,7 +509,7 @@
     //실행된 명령어 반환
     function handleCommandInput(message) {
       if (message == null) return;
-      const matches = message.split('\n');
+      const matches = message.split(/[\n\s]+/);
 
 
       matches.forEach(word=> {
