@@ -61,6 +61,7 @@
       const savedChats = JSON.parse(localStorage.getItem("savedChats") || "{}");
       for (const name in savedChats) {
         const container = document.createElement("div");
+        container.id = "chatContainer"
         container.style.display = 'flex';
         container.style.alignItems = 'center';
         container.style.marginBottom = '10px';
@@ -376,7 +377,7 @@
         `;
       });*/
 
-      return text || ""
+      return text
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
         .replace(/(^|\s)\*(?!\s)([^\*]+?)\*(?!\*)/g, '$1<em>$2</em>')
         .replace(/^(\s*)\*\s+(.*)$/gm, '$1• $2')
@@ -524,6 +525,7 @@
             switch(cmd){
               case "bg":
                 const in_sidebar_btns = document.getElementById("sidebar").querySelectorAll('button');
+                const in_chat_btns = document.getElementById("chatContainer").querySelectorAll('button');
                 switch(value){
                   case "basic":
                     document.body.style.background = 'linear-gradient(135deg, #e0f7fa, #f0f4c3)';
@@ -531,11 +533,17 @@
                     in_sidebar_btns.forEach(button => {
                         button.style.color = 'black';
                     });
+                    in_chat_btns.forEach(button => {
+                        button.style.color = 'black';
+                    });
                     break;
                   case "night":
                     document.body.style.background = 'linear-gradient(135deg, #000000, #002a79)';
                     // 찾은 각 버튼의 배경색을 흰색으로 변경한다
                     in_sidebar_btns.forEach(button => {
+                        button.style.color = 'white';
+                    });
+                    in_chat_btns.forEach(button => {
                         button.style.color = 'white';
                     });
                     break;
