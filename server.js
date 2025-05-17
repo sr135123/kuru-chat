@@ -7,7 +7,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const PORT = 20251;
+const PORT = process.env.PORT || 3000;
 const apiKey = process.env.GENAI_API_KEY;
 
 const genAI = new GoogleGenerativeAI(apiKey);
