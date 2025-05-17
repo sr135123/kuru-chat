@@ -4,48 +4,16 @@ import path from 'path';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import dotenv from 'dotenv';
 
-
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
 const apiKey = process.env.GENAI_API_KEY;
 
 const genAI = new GoogleGenerativeAI(apiKey);
-const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+const model = genAI.getGenerativeModel({ model: 'gemini-pro' }); // 안정적인 모델로 변경
 
 const server = http.createServer(async (req, res) => {
-  // 1. GET / → public/index.html 서빙
-  if (req.method === 'GET' && req.url === '/') {
-    const filePath = path.join(process.cwd(), 'public', 'index.html');
-    fs.readFile(filePath, (err, data) => {
-      if (err) {
-        res.writeHead(500);
-        res.end('🔥 index.html 불러오기 실패');
-      } else {
-        res.writeHead(200, { 'Content-Type': 'text/html' });
-        res.end(data);
-      }
-    });
-    return;
-  }
-
-    // 이미지 정적 파일 서빙 (/img/ 경로)
-    if (req.method === 'GET' && req.url.startsWith('/img/')) {
-    const filePath = path.join(process.cwd(), 'public', req.url);
-    fs.readFile(filePath, (err, data) => {
-        if (err) {
-        res.writeHead(404);
-        res.end("이미지를 찾을 수 없어요 😢");
-        } else {
-        res.writeHead(200, { "Content-Type": getImageContentType(filePath) });
-        res.end(data);
-        }
-    });
-    return;
-    }
-
-
-  // 2. POST /genai → AI 응답 처리
+  // ✅ /genai API 처리
   if (req.method === 'POST' && req.url === '/genai') {
     let body = '';
     req.on('data', chunk => (body += chunk));
@@ -66,20 +34,39 @@ const server = http.createServer(async (req, res) => {
     });
     return;
   }
+
+  // ✅ 정적 파일 처리 (html, css, js, img 등 자동 대응)
+  const filePath = path.join(process.cwd(), 'public', req.url === '/' ? 'index.html' : req.url);
+  fs.readFile(filePath, (err, data) => {
+    if (err) {
+      res.writeHead(404);
+      res.end('❌ 파일을 찾을 수 없습니다');
+    } else {
+      res.writeHead(200, { 'Content-Type': getContentType(filePath) });
+      res.end(data);
+    }
+  });
 });
 
 server.listen(PORT, () => {
   console.log(`🚀 서버 실행 중! http://localhost:${PORT}`);
 });
 
-function getImageContentType(filePath) {
+function getContentType(filePath) {
   const ext = path.extname(filePath).toLowerCase();
   switch (ext) {
+    case '.html': return 'text/html';
+    case '.css': return 'text/css';
+    case '.js': return 'application/javascript';
+    case '.json': return 'application/json';
     case '.png': return 'image/png';
     case '.jpg':
     case '.jpeg': return 'image/jpeg';
     case '.gif': return 'image/gif';
     case '.ico': return 'image/x-icon';
+    case '.svg': return 'image/svg+xml';
+    case '.woff': return 'font/woff';
+    case '.woff2': return 'font/woff2';
     default: return 'application/octet-stream';
   }
 }
