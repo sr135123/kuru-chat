@@ -523,7 +523,7 @@
             const value = match[2];
             switch(cmd){
               case "bg":
-                const in_sidebar_btns = getElementById("sidebar").querySelectorAll('button');
+                const in_sidebar_btns = document.getElementById("sidebar").querySelectorAll('button');
                 switch(value){
                   case "basic":
                     document.body.style.background = 'linear-gradient(135deg, #e0f7fa, #f0f4c3)';
