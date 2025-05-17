@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <title>쿠루쿠루의 캐릭터 AI</title>
   <script type="module">
-    //123
+    //0.1
     const base_sets = `
     * 프롬프트가 없을 경우에는 친구같은 말투를 사용
     * {{}}안에 들어가 있는 텍스트는 이미지라고 간주한다.
@@ -316,11 +316,11 @@
       let placeholderIndex = 0;
       
       // 1단계: 코드 블록을 대체 텍스트로 임시 치환하고 저장
-      text = text.replace(/```(\S+)\n([\s\S]*?)```/g, (_, title, content) => {
+      text = (text || "").replace(/```(\S+)\n([\s\S]*?)```/g, (_, title, content) => {
         const key = `__CODE_BLOCK_${placeholderIndex++}__`;
         placeholderMap.set(key, { title: title.trim(), content: content.trim() });
         return key;
-      }) || "";
+      });
 
       text = escapeHtml(text);
 
@@ -331,14 +331,14 @@
         .replace(/^# (.*$)/gim, '<h1>$1</h1>');
 
       // 4. 이미지
-      text = text.replace(/\{\{(.*?)\}\}/g, (_, filename) => {
+      text = (text || "").replace(/\{\{(.*?)\}\}/g, (_, filename) => {
         const safeName = filename.trim().replace(/[^a-zA-Z0-9-_]/g, '');
         return `<br><img src="/img/${safeName}.png" alt="${safeName}" class="inline-image"><br>`;
-      }) || "";
+      });
 
       // 5. 테이블
       const tableRegex = /((?:^\|.*?\|\s*(?:\n|$))+)/gm;
-      text = text.replace(tableRegex, (match) => {
+      text = (text || "").replace(tableRegex, (match) => {
         const rows = match.trim().split('\n').filter(Boolean);
         if (rows.length < 2) return match;
 
@@ -349,7 +349,7 @@
         const tbody = '<tbody>' + body.map(row => '<tr>' + row.map(c => `<td>${c}</td>`).join('') + '</tr>').join('') + '</tbody>';
 
         return `<table class="chat-table">${thead}${tbody}</table>`;
-      }) || "";
+      }) ;
 
       // 2단계: 실제 HTML 변환으로 치환
       for (const [key, { title, content }] of placeholderMap.entries()) {
