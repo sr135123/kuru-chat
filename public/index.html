@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <title>쿠루쿠루의 캐릭터 AI</title>
   <script type="module">
-    //0.2
+    //0.3
     const base_sets = `
     * 프롬프트가 없을 경우에는 친구같은 말투를 사용
     * {{}}안에 들어가 있는 텍스트는 이미지라고 간주한다.
@@ -529,7 +529,6 @@
                 switch(value){
                   case "basic":
                     document.body.style.background = 'linear-gradient(135deg, #e0f7fa, #f0f4c3)';
-                    // 찾은 각 버튼의 배경색을 흰색으로 변경한다
                     in_sidebar_btns.forEach(button123 => {
                         button123.style.color = 'black';
                     });
@@ -539,7 +538,6 @@
                     break;
                   case "night":
                     document.body.style.background = 'linear-gradient(135deg, #000000, #002a79)';
-                    // 찾은 각 버튼의 배경색을 흰색으로 변경한다
                     in_sidebar_btns.forEach(button234 => {
                         button234.style.color = 'white';
                     });

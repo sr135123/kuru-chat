@@ -1,7 +1,7 @@
 import http from 'http';
 import fs from 'fs';
 import path from 'path';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenAI } from "@google/genai";
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -9,8 +9,8 @@ dotenv.config();
 const PORT = process.env.PORT || 3000;
 const apiKey = process.env.GENAI_API_KEY;
 
-const genAI = new GoogleGenerativeAI(apiKey);
-const model = genAI.getGenerativeModel({ model: 'Gemini-2.5-Pro-Exp-03-25' });
+const ai = new GoogleGenAI({ apiKey: apiKey });
+//Gemini-2.5-Pro-Exp-03-25
 
 const server = http.createServer(async (req, res) => {
   // ✅ /genai API 처리
@@ -20,8 +20,10 @@ const server = http.createServer(async (req, res) => {
     req.on('end', async () => {
       try {
         const { contents } = JSON.parse(body);
-        const result = await model.generateContent(contents);
-        const response = await result.response;
+        const response = await ai.models.generateContent({
+          model: "Gemini-2.5-Pro-Exp-03-25",
+          contents: contents,
+        });
         const text = response.text();
 
         res.writeHead(200, { 'Content-Type': 'application/json' });
