@@ -25,10 +25,9 @@ const server = http.createServer(async (req, res) => {
           model: "gemini-2.0-flash-lite",
           contents: contents,
         });
-        const text = response.text();
 
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ reply: text }));
+        res.end(JSON.stringify({ reply: response }));
       } catch (e) {
         console.error(e);
         res.writeHead(500);
