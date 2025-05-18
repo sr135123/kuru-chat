@@ -5,7 +5,12 @@
   <meta charset="UTF-8">
   <title>쿠루쿠루의 캐릭터 AI</title>
   <script type="module">
-    //0.4
+    //0.5
+    const availableModels = [
+      { value: "gemini-2.0-flash-lite", label: "Gemini 2.0 Flash Lite" },
+      { value: "gemini-2.5-flash-preview-04-17", label: "Gemini 2.5 Flash Preview" }
+    ];
+
     const base_sets = `
     * 프롬프트가 없을 경우에는 친구같은 말투를 사용
     * {{}}안에 들어가 있는 텍스트는 이미지라고 간주한다.
@@ -277,6 +282,7 @@
 
     window.addEventListener("DOMContentLoaded", () => {
       updateChatList();
+      populateModelDropdown();
     });
 
     async function sendMessage() {
@@ -429,6 +435,8 @@
 
         fullConversation = `# 기본규칙:\n${base_sets}\n\n${fullConversation}`
 
+        const selectedModel = document.getElementById("modelSelect").value;
+
 
         while (fullConversation.split(/\s+/).length > 990000) {
           chatHistoryForAI.shift();
@@ -438,7 +446,10 @@
         const response = await fetch("/genai", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ contents: fullConversation })
+          body: JSON.stringify({ 
+            contents: fullConversation,
+            model: selectedModel
+          })
         });
 
         const data = await response.json();
@@ -560,6 +571,27 @@
         return '채팅중...';
       }
     });
+
+    function populateModelDropdown() {
+      const select = document.getElementById("modelSelect");
+      select.innerHTML = ""; // 기존 옵션 제거
+
+      availableModels.forEach(model => {
+        const option = document.createElement("option");
+        option.value = model.value;
+        option.textContent = model.label;
+        select.appendChild(option);
+      });
+
+      // 저장된 모델이 있으면 선택, 없으면 기본값
+      const saved = localStorage.getItem("selectedModel");
+      if (saved) select.value = saved;
+
+      // 변경 시 저장
+      select.addEventListener("change", () => {
+        localStorage.setItem("selectedModel", select.value);
+      });
+    }
 
 
   </script>
@@ -775,6 +807,13 @@
   <div id="sidebar">
     <button id="newChat">새 대화</button>
     <div id="chatList"></div>
+
+    <div style="margin-top:auto; padding-top: 10px;">
+      <label for="modelSelect" style="font-size: 14px;">모델 선택:</label>
+      <select id="modelSelect" style="margin-top: 5px; padding: 6px; border-radius: 10px; width: 100%;">
+
+      </select>
+    </div>
   </div>
   <div id="main">
     <div id="chatDisplay"></div>
