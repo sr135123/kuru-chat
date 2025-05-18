@@ -270,9 +270,9 @@
       history.forEach(line => {
         const [sender, ...rest] = line.split(": ");
         const content = rest.join(": ");
-        if (sender === "You") {
+        if (sender === "User") {
           addMessage("user", content);
-        } else if (sender === "Gemini") {
+        } else if (sender === "Chat-Bot") {
           addMessage("bot", content);
         }
       });
