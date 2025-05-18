@@ -20,9 +20,9 @@ const server = http.createServer(async (req, res) => {
     req.on('data', chunk => (body += chunk));
     req.on('end', async () => {
       try {
-        const { contents } = JSON.parse(body);
+        const { contents, model } = JSON.parse(body);
         const response = await ai.models.generateContent({
-          model: "gemini-2.0-flash-lite",
+          model: model,
           contents: contents,
         });
 
