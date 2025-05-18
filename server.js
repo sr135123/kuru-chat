@@ -27,7 +27,7 @@ const server = http.createServer(async (req, res) => {
         });
 
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ reply: String(response) }));
+        res.end(JSON.stringify({ reply: response }));
       } catch (e) {
         console.error(e);
         res.writeHead(500);
