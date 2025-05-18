@@ -10,7 +10,8 @@ const PORT = process.env.PORT || 3000;
 const apiKey = process.env.GENAI_API_KEY;
 
 const ai = new GoogleGenAI({ apiKey: apiKey });
-//Gemini-2.5-Pro-Exp-03-25
+//gemini-2.5-pro-exp-03-25
+//gemini-2.5-flash-preview-04-17
 
 const server = http.createServer(async (req, res) => {
   // ✅ /genai API 처리
@@ -21,7 +22,7 @@ const server = http.createServer(async (req, res) => {
       try {
         const { contents } = JSON.parse(body);
         const response = await ai.models.generateContent({
-          model: "Gemini-2.5-Pro-Exp-03-25",
+          model: "gemini-2.5-pro-exp-03-25",
           contents: contents,
         });
         const text = response.text();
