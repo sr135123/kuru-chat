@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <title>쿠루쿠루의 캐릭터 AI</title>
   <script type="module">
-    //0.7
+    //0.8
     const availableModels = [
       { value: "gemini-2.0-flash-lite", label: "Gemini 2.0 Flash Lite" },
       { value: "gemini-2.5-flash-preview-04-17", label: "Gemini 2.5 Flash Preview" }
@@ -451,9 +451,7 @@
             model: selectedModel
           })
         });
-
-        const data = await response.json();
-        const botReply = data.reply;
+        const botReply = response;
 
         removeLoading();
         chatHistory.push(`Gemini: ${botReply}`);
