@@ -381,6 +381,7 @@
         .replace(/(^|\s)\*(?!\s)([^\*]+?)\*(?!\*)/g, '$1<em>$2</em>')
         .replace(/^(\s*)\*\s+(.*)$/gm, '$1• $2')
         .replace(/cmd\[.*?\]/g, '')
+        .replace(/^> (.*$)/gim, '<blockquote>$1</blockquote>')
         .replace(/\n/g, '<br>');
     }
 
