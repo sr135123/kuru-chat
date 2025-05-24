@@ -6,19 +6,15 @@
   <title>쿠루쿠루의 캐릭터 AI</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script type="module">
-    //0.1
-
     const availableModels = [
       { value: "gemini-2.0-flash-lite", label: "Gemini 2.0 Flash Lite" },
-      { value: "gemini-2.5-flash-preview-04-17", label: "Gemini 2.5 Flash Preview" },
-      { value: "gemini-1.5-pro", label: "Gemini 1.5 Pro" },
-      { value: "gemini-2.0-pro", label: "Gemini 2.0 Pro" }
+      { value: "gemini-2.5-flash-preview-04-17", label: "Gemini 2.5 Flash Preview 04/17" },
+      { value: "gemini-2.5-flash-preview-05-20", label: "Gemini 2.5 Flash Preview 05/20" },
+      { value: "gemini-2.5-pro-experimental-03-25", label: "Gemini 2.5 Pro Experimental 03-25" }
     ];
 
     const base_sets = `
     * {{}}안에 들어가 있는 텍스트는 이미지라고 간주한다.
-      * 사용 가능한 이미지: 이미지는 맥락에 맞게 사용하며 사용은 선택일 뿐 필수가 아니다.
-        * hoshino_ai: 애니메이션 최애의 아이의 주인공인 호시노 아이가 활짝 웃으며 손을 뻗고 있는 포즈를 취하고 있습니다. 호시노 아이는 흰색 프릴이 달린 짧은 상의(크롭탑)와 청색 반바지를 입고 있습니다. 여름 해변 패션을 연상시키는 스타일입니다. 머리에는 해바라기 두 송이와 귀여운 토끼 모양의 리본 장식이 있으며, 이는 그녀의 귀엽고 사랑스러운 이미지를 강조합니다. 밝게 웃으며 윙크하고 있으며, 역동적인 점프 자세로 카메라(또는 보는 사람)를 향해 손을 뻗고 있습니다. 이는 활기차고 생기 있는 분위기를 전달합니다. 배경은 흰색으로 되어 있어 캐릭터가 더욱 두드러져 보입니다.
     * **Chat-Bot:, User: 등은 맥락을 이해하는 용도이므로 절대 reply에 포함하지 말 것. 오직 메세지만 출력하도록 설정**
     * 이전에 했던 대화를 반복하는 행위는 하지 않는다.
     * 당신은 상황에 맞게 cmd[명령어(변수)] 형식의 명령어를 사용할 수 있다.
@@ -345,7 +341,14 @@
         return `<br><img src="/img/${safeName}.png" alt="${safeName}" class="inline-image"><br>`;
       });
 
-      // 5. 테이블
+      // 5. 마크다운 이미지 포맷 ![alt](url)
+      text = (text || "").replace(/!\[([^\]]*)\]\((.*?)\)/g, (_, alt, url) => {
+        const safeAlt = escapeHtml(alt.trim());
+        const safeUrl = escapeHtml(url.trim());
+        return `<br><img src="${safeUrl}" alt="${safeAlt}" class="inline-image"><br>`;
+      });
+
+      // 6. 테이블
       const tableRegex = /((?:^\|.*?\|\s*(?:\n|$))+)/gm;
       text = (text || "").replace(tableRegex, (match) => {
         const rows = match.trim().split('\n').filter(Boolean);
@@ -372,18 +375,6 @@
         `;
         text = text.replace(key, html);
       }
-
-      /*// 5. 키워드 블록 (예: ```파일설명\n내용```)
-      text = text.replace(/```(\S+)\n([\s\S]*?)```/g, (_, title, content) => {
-        const escaped = escapeHtml(content.trim());
-        const safeTitle = escapeHtml(title.trim());
-        return `
-          <div class="file-description-box">
-            <div class="file-description-title">${safeTitle}</div>
-            <pre class="file-description-content">${escaped}</pre>
-          </div>
-        `;
-      });*/
 
       return text
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
