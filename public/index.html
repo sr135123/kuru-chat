@@ -354,7 +354,7 @@
         const thead = '<thead><tr>' + header.map(h => `<th>${h}</th>`).join('') + '</tr></thead>';
         const tbody = '<tbody>' + body.map(row => '<tr>' + row.map(c => `<td>${c}</td>`).join('') + '</tr>').join('') + '</tbody>';
 
-        return `<br><table class="chat-table">${thead}${tbody}</table><br>`;
+        return `<table class="chat-table">${thead}${tbody}</table><br>`;
       }) ;
 
       // 2단계: 실제 HTML 변환으로 치환
@@ -371,9 +371,9 @@
       }
 
       return text
-        .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-        .replace(/^## (.*$)/gim, '<h2>$1</h2>')
-        .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+        .replace(/### (.*$)/gim, '<h3>$1</h3>')
+        .replace(/## (.*$)/gim, '<h2>$1</h2>')
+        .replace(/# (.*$)/gim, '<h1>$1</h1>')
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
         .replace(/(^|\s)\*(?!\s)([^\*]+?)\*(?!\*)/g, '$1<em>$2</em>')
         .replace(/^(\s*)\*\s+(.*)$/gm, '$1• $2')
