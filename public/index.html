@@ -354,7 +354,7 @@
         const thead = '<thead><tr>' + header.map(h => `<th>${h}</th>`).join('') + '</tr></thead>';
         const tbody = '<tbody>' + body.map(row => '<tr>' + row.map(c => `<td>${c}</td>`).join('') + '</tr>').join('') + '</tbody>';
 
-        return `<table class="chat-table">${thead}${tbody}</table>`;
+        return `<br><table class="chat-table">${thead}${tbody}</table><br>`;
       }) ;
 
       // 2단계: 실제 HTML 변환으로 치환
