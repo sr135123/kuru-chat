@@ -10,8 +10,6 @@ const PORT = process.env.PORT || 3000;
 const apiKey = process.env.GENAI_API_KEY;
 
 const ai = new GoogleGenAI({ apiKey: apiKey });
-//gemini-2.5-flash-preview-04-17
-//gemini-2.0-flash-lite
 
 const server = http.createServer(async (req, res) => {
   // ✅ /genai API 처리
@@ -19,11 +17,32 @@ const server = http.createServer(async (req, res) => {
     let body = '';
     req.on('data', chunk => (body += chunk));
     req.on('end', async () => {
+
+      const safetySettings = [
+        {
+          category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+          threshold: "BLOCK_NONE",
+        },
+        {
+          category: "HARM_CATEGORY_HATE_SPEECH",
+          threshold: "BLOCK_NONE",
+        },
+        {
+          category: "HARM_CATEGORY_HARASSMENT",
+          threshold: "BLOCK_NONE",
+        },
+        {
+          category: "HARM_CATEGORY_DANGEROUS_CONTENT",
+          threshold: "BLOCK_NONE",
+        }
+      ];
+
       try {
         const { contents, model } = JSON.parse(body);
         const response = await ai.models.generateContent({
           model: model,
           contents: contents,
+          safety_settings: safetySettings,
         });
 
         res.writeHead(200, { 'Content-Type': 'application/json' });
